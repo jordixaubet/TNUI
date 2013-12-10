@@ -170,30 +170,34 @@ class AdWin:
         leap = False
         
         # Recorrem la llista a cada addició creant-ne subgrups
-        for i in range(1, self.length-1):
+        for i in range(self.length):
             w0 = self.data[:i]
             w1 = self.data[i:]
-            
-            if self.length < 10:
-                print w0
-                print w1
+            # print w0, len(w0)
+            # print w1, len(w1)
 
-            m0 = float(sum(w0)/len(w0))
-            m1 = float(sum(w1)/len(w1))
+            if len(w0) != 0 and len(w1) != 0:
 
-            val = self.ecut(len(w0), len(w1))
-            # print "mida m0 =", len(w0)
-            # print "mida m1 =", len(w1)
-            # print "mida data=", len(self.data)
-            # print "valor length = ", self.length
-            # print "ecut =", val
-            # print "dif:mitjes = ", m1-m0
-            if not( math.fabs(m1 - m0) > val ):
-                leap = True
-                break
+                # if self.length < 10:
+                #     print w0, len(w0)
+                #     print w1, len(w1)
+
+                m0 = float(sum(w0)/len(w0))
+                m1 = float(sum(w1)/len(w1))
+
+                val = self.ecut(len(w0), len(w1))
+                # print "mida m0 =", len(w0)
+                # print "mida m1 =", len(w1)
+                # print "mida data=", len(self.data)
+                # print "valor length = ", self.length
+                # print "ecut =", val
+                # print "dif:mitjes = ", m0-m1
+                if math.fabs(m0 - m1) > val:
+                    leap = True
+                    break
             
         if leap:
-            print "leaped"
+            # print "leaped"
             self.data = w1
             self.length = len(w1)
 
@@ -223,11 +227,11 @@ class AdWin:
         der = 4.0/delta;
         # print "da=", der
         der = math.log(der)
-        print "do=", der
+        # print "do=", der
         aux = aux * der #math.log( 4.0 / ( float(self.rel) / (n1+n2) ) )
         # print "aux2 = ", aux
         # print "sqrt(aux) = ", math.sqrt(aux)
-        print
+        # print
         return math.sqrt(aux)
 
 # PROVA AMB DADES SINTETIQUES
