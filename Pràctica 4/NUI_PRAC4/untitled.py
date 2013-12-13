@@ -17,55 +17,55 @@ EXERCICI 1
 
 
 """
-# class SlidWin:
-#     """
-#         Finestra lliscant que permet trobar la mitja d'una sèrie de dades de mida màxima W_size.
-#         Aquesta finestra lliscant recalcula la mitja amb les fòrmules d'increment i decrement que es troben més abaix d'aquest fitxer.
-#     """
-#     def __init__(self, W_size):
-#         """
-#             Constructor que inicialitza els paràmetres per la finestra lliscant.
-#             param W_size Mida màxima de la finestra lliscant.
-#         """
-#         self.data = [] # dades
-#         self.W_size = W_size # tamany de la finestra
-#         self.length = 0 # length actual de la finestra
-#         self.m = 0.0 # mitja de la finestra
-#     def add(self, x_t):
-#         """
-#             Afegeix una nova dada a la finestra i retorna la mitja d'aquesta i el valor de l'accio:.
-#             return 	new_mean,  1  : si la mitja ha disminuït
-# 					new_mean, -1  : si la mitja ha augmentat
-#                     new_mean,  0  : si la mitja es identica
-#         """
-#         #Les primeres dades que encara no son de l'amplada de la finestra s'afegeixen de cop
-#         #i incrementen el valor del self.length
-#         if self.length < self.W_size:
-#             self.data.append(x_t)
-#             self.length += 1
-#         #A partir de que tenim la finestra "plena", cada vegada que entra una dada desplaçem les
-#         #que ja hi ha, eliminant-ne la mes vella i afegint-hi la mes nova
-#         else:
-#             for i in range(self.W_size-1):
-#                 self.data[i] = self.data[i+1]
-#             self.data[self.length-1] = x_t
+class SlidWin:
+    """
+        Finestra lliscant que permet trobar la mitja d'una sèrie de dades de mida màxima W_size.
+        Aquesta finestra lliscant recalcula la mitja amb les fòrmules d'increment i decrement que es troben més abaix d'aquest fitxer.
+    """
+    def __init__(self, W_size):
+        """
+            Constructor que inicialitza els paràmetres per la finestra lliscant.
+            param W_size Mida màxima de la finestra lliscant.
+        """
+        self.data = [] # dades
+        self.W_size = W_size # tamany de la finestra
+        self.length = 0 # length actual de la finestra
+        self.m = 0.0 # mitja de la finestra
+    def add(self, x_t):
+        """
+            Afegeix una nova dada a la finestra i retorna la mitja d'aquesta i el valor de l'accio:.
+            return 	new_mean,  1  : si la mitja ha disminuït
+					new_mean, -1  : si la mitja ha augmentat
+                    new_mean,  0  : si la mitja es identica
+        """
+        #Les primeres dades que encara no son de l'amplada de la finestra s'afegeixen de cop
+        #i incrementen el valor del self.length
+        if self.length < self.W_size:
+            self.data.append(x_t)
+            self.length += 1
+        #A partir de que tenim la finestra "plena", cada vegada que entra una dada desplaçem les
+        #que ja hi ha, eliminant-ne la mes vella i afegint-hi la mes nova
+        else:
+            for i in range(self.W_size-1):
+                self.data[i] = self.data[i+1]
+            self.data[self.length-1] = x_t
         
-#         #Calculem la mitja del vector
-#         new_mean = 0
-#         for i in range(self.length):
-#             new_mean += self.data[i]
-#         new_mean /= self.length
+        #Calculem la mitja del vector
+        new_mean = 0
+        for i in range(self.length):
+            new_mean += self.data[i]
+        new_mean /= self.length
         
-#         old_mean = self.m
-#         #Assignem la nova mitja al valor de mitja de la classe
-#         self.m = new_mean
+        old_mean = self.m
+        #Assignem la nova mitja al valor de mitja de la classe
+        self.m = new_mean
         
-#         if new_mean < old_mean:
-#             return new_mean, 1
-#         elif new_mean > old_mean:
-#             return new_mean, -1
-#         else:
-#             return new_mean, 0
+        if new_mean < old_mean:
+            return new_mean, 1
+        elif new_mean > old_mean:
+            return new_mean, -1
+        else:
+            return new_mean, 0
 
         
 # #Testing de la funció
@@ -173,31 +173,18 @@ class AdWin:
         for i in range(self.length):
             w0 = self.data[:i]
             w1 = self.data[i:]
-            # print w0, len(w0)
-            # print w1, len(w1)
 
             if len(w0) != 0 and len(w1) != 0:
-
-                # if self.length < 10:
-                #     print w0, len(w0)
-                #     print w1, len(w1)
 
                 m0 = float(sum(w0)/len(w0))
                 m1 = float(sum(w1)/len(w1))
 
                 val = self.ecut(len(w0), len(w1))
-                # print "mida m0 =", len(w0)
-                # print "mida m1 =", len(w1)
-                # print "mida data=", len(self.data)
-                # print "valor length = ", self.length
-                # print "ecut =", val
-                # print "dif:mitjes = ", m0-m1
                 if math.fabs(m0 - m1) > val:
                     leap = True
                     break
             
         if leap:
-            # print "leaped"
             self.data = w1
             self.length = len(w1)
 
@@ -213,26 +200,128 @@ class AdWin:
         return self.m, compra
 
     def ecut(self, n1, n2):
-        aux = 0.0
-        # print "n1=", n1
-        # print "n2=", n2
-        down1 = 1.0/n1
-        down2 = 1.0/n2
-        m = 1.0/(down1+down2)
-        # print m
-        aux = 1/(2*m)
-        # print "aux1 = ", aux
+        m = 1.0/( (1.0/n1) + (1.0/n2))
         delta = self.rel / (n1+n2)
-        # print delta
-        der = 4.0/delta;
-        # print "da=", der
-        der = math.log(der)
-        # print "do=", der
-        aux = aux * der #math.log( 4.0 / ( float(self.rel) / (n1+n2) ) )
-        # print "aux2 = ", aux
-        # print "sqrt(aux) = ", math.sqrt(aux)
-        # print
+        aux = ( 1.0 / (2 * m) ) * math.log( 4.0 / delta )
         return math.sqrt(aux)
+
+# # PROVA AMB DADES SINTETIQUES
+
+# # Adatptative window amb d=0.98
+# method1 = AdWin(0.95)
+
+# v=[] # Genera un mostra de 400 + 600 valors amb un canvi brusc entre 400 i 401.
+# for i in xrange(200):
+#     v.append(0.6+0.1*(random.random()-0.5))
+# for i in xrange(400):
+#     v.append(0.4+0.1*(random.random()-0.5))
+# for i in xrange(600):
+#     v.append(0.1*(random.random()-0.5))
+    
+# # Anem afegint de forma seqüencial les dades dins la nostra finestra lliscant. Guardem el resultat dins la llista output1 i output2
+# output1=[]
+# for item in v:
+#     mean,action=method1.add(item)
+#     output1.append(mean)
+    
+  
+# # Visualitzem el resultat
+# pylab.plot(v)
+# pylab.plot(output1,'r') # plot del resultat del Mètode 1
+# pylab.show()
+
+# # Prova amb dades de la Borsa utilizant l'estratègia bàsica que us donem
+# method = AdWin(0.95)
+# for item in data:
+#     # Creem un objecte broker. Aquest objecte cada cop que entrem una nova dada dira si hem de comprar o vendre accions
+#     # per_change indica el percentatge de canvi respecte al valor de l'accio per realitzar una compra/venta
+#     # min_time indica el temps minim que ens hem d'esperar per fer nova accio de compra/venta
+#     broker= StockMarketWin(method,0.1,10)
+#     # Executem l'estrtegia de comprar a partir de l'objecte broker i les dades d'entrada. La funció estrategiaBasica 
+#     # està definidia dins utilsP4.py. Ella és la responsable de decidir la quantatit de compra o venta d'accios a partir de la
+#     # suggeriencia del broker
+#     temp_badget,invested_money,non_strategy= estrategiaBasica(broker,data[item])
+#     # Mostrem els resultats per pantalla
+#     print_results(data[item],temp_badget,invested_money,non_strategy)
+
+"""
+
+EXERCICI 3
+
+"""
+def estrategia(broker,data,budget=100000.00):
+    """
+        Definim una estrategia de joc. 
+        Parametres d'entrada : StockMarketWin 
+                             : Dades - dades que utilizarem per fer el test
+                             : budget- quantitat de diners que volem jugar
+    """
+    # Definim els parametres inicials de l'estrategia
+    # Gastem el 50% del budget en accions
+    n_stocks= math.floor((budget/2)/float(data[0]))
+    init_stocks=n_stocks
+    # Descomptem del budget el valor de les acciones que hem comprat
+    budget = budget - n_stocks * float(data[0])
+    
+    # inicialitzem variables
+    invested_money=np.zeros(len(data))
+    temp_badget=np.zeros(len(data))
+    non_strategy=np.zeros(len(data))
+    
+    accio_prev = -1;
+    prev_value = 0;
+
+    rati_compra = 0.8
+    rati_venda = 0.2
+    
+    cont=0;
+    # iterem les dades de forma seqüencial simulant una partida de joc
+    for current_value in data:
+        # afegim una nova dada i obtenim l'accio recomanada pel broker
+        action  = broker.add(float(current_value))
+
+        # diferencia = math.fabs(float(current_value) - prev_value);
+        # Si ens surt dues vegades seguides o mes la mateixa accio,
+        # executem el que toqui fer en aquell moment
+        if action != None:
+
+            if action[1] == accio_prev:
+                if action[1] == -1: # ACCIÓ COMPRA
+                    # Com que comprem, reiniciem el rati de vendes
+                    rati_venda = 0.2
+
+                    money2spend=rati_compra*budget
+                    new_actions = math.floor(money2spend/float(current_value))
+                    n_stocks+= new_actions
+                    budget-=new_actions*float(current_value)
+
+                    # Determino un límit de 0.2 com a mínim de rati de vendes
+                    if rati_compra > 0.2:
+                        #El reduim cada vegada mes, ja que cada cop son mes cares les accions
+                        rati_compra -= 0.01
+
+                if action[1] == 1: # ACCIÓ VENTA
+                    # Com que venem, reiniciem el rati de compres
+                    rati_compra = 0.8
+
+                    actions2sell=round(rati_venda*n_stocks)
+                    n_stocks-= actions2sell
+                    budget+=actions2sell*float(current_value)
+
+                    if rati_venda < 0.8:
+                        # Augmentem el rati cada vegada mes, ja que cada cop surt menys a compte vendre, en podem treure menys rendibilitat
+                        rati_venda += 0.01
+
+        temp_badget[cont]=budget
+        invested_money[cont]=n_stocks*float(current_value)
+        non_strategy[cont]=(budget/2) + init_stocks*float(current_value)
+        cont=cont+1
+
+        # Nomes volem considerar com a accio previa la última accio de commpra-venda realitzada
+        if action[1] != 0:
+            accio_prev = action[1];
+        prev_value = float(current_value)
+    return temp_badget,invested_money,non_strategy
 
 # PROVA AMB DADES SINTETIQUES
 
@@ -259,16 +348,16 @@ pylab.plot(v)
 pylab.plot(output1,'r') # plot del resultat del Mètode 1
 pylab.show()
 
-# # Prova amb dades de la Borsa utilizant l'estratègia bàsica que us donem
-# method = AdWin(0.95)
-# for item in data:
-#     # Creem un objecte broker. Aquest objecte cada cop que entrem una nova dada dira si hem de comprar o vendre accions
-#     # per_change indica el percentatge de canvi respecte al valor de l'accio per realitzar una compra/venta
-#     # min_time indica el temps minim que ens hem d'esperar per fer nova accio de compra/venta
-#     broker= StockMarketWin(method,0.1,10)
-#     # Executem l'estrtegia de comprar a partir de l'objecte broker i les dades d'entrada. La funció estrategiaBasica 
-#     # està definidia dins utilsP4.py. Ella és la responsable de decidir la quantatit de compra o venta d'accios a partir de la
-#     # suggeriencia del broker
-#     temp_badget,invested_money,non_strategy= estrategiaBasica(broker,data[item])
-#     # Mostrem els resultats per pantalla
-#     print_results(data[item],temp_badget,invested_money,non_strategy)
+# Prova amb dades de la Borsa utilizant l'estratègia bàsica que us donem
+method = AdWin(0.95)
+for item in data:
+    # Creem un objecte broker. Aquest objecte cada cop que entrem una nova dada dira si hem de comprar o vendre accions
+    # per_change indica el percentatge de canvi respecte al valor de l'accio per realitzar una compra/venta
+    # min_time indica el temps minim que ens hem d'esperar per fer nova accio de compra/venta
+    broker= StockMarketWin(method,0.1,10)
+    # Executem l'estrtegia de comprar a partir de l'objecte broker i les dades d'entrada. La funció estrategiaBasica 
+    # està definidia dins utilsP4.py. Ella és la responsable de decidir la quantatit de compra o venta d'accios a partir de la
+    # suggeriencia del broker
+    temp_badget,invested_money,non_strategy= estrategia(broker,data[item])
+    # Mostrem els resultats per pantalla
+    print_results(data[item],temp_badget,invested_money,non_strategy)
