@@ -341,8 +341,8 @@ output1=[]
 for item in v:
     mean,action=method1.add(item)
     output1.append(mean)
-    
-  
+
+
 # Visualitzem el resultat
 pylab.plot(v)
 pylab.plot(output1,'r') # plot del resultat del Mètode 1
